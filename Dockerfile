@@ -14,6 +14,16 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
+    
+# install systemd backport to prevent failure while
+# parsing systemd status
+RUN echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends -t=buster-backports systemd \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
+    && apt-get clean
+    
 
 # Install Ansible via pip.
 RUN pip3 install $pip_packages
